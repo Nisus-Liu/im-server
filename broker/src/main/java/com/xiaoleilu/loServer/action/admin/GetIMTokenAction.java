@@ -46,13 +46,13 @@ public class GetIMTokenAction extends AdminAction {
                 if (errorCode1 == ErrorCode.ERROR_CODE_SUCCESS) {
                     //ba errorcode qudiao
                     byte[] data = new byte[result.length -1];
-                    for (int i = 0; i < data.length; i++) {
+                    for (int i = 0; i < data.length; i++) { // System.arraycopy(result, 1, data, 0, data.length);
                         data[i] = result[i+1];
                     }
                     String token = Base64.getEncoder().encodeToString(data);
 
                     LOG.info("get im token success {},{},{}", userId, input.getClientId(), token.substring(0, Math.min(10, token.length())));
-                    
+
                     return new Result(errorCode1, new OutputGetIMTokenData(userId, token));
                 } else {
                     return new Result(errorCode1);

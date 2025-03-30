@@ -90,7 +90,7 @@ public class RouteAction extends Action {
 
 
             if (session != null) {
-                bytes = AES.AESDecrypt(bytes, session.getSecret(), true);
+                bytes = AES.AESDecrypt(bytes, session.getSecret(), true); //: session secret 哪来的?
             } else {
                 sendResponse(response, ErrorCode.ERROR_CODE_SECRECT_KEY_MISMATCH, null);
                 return true;
@@ -108,7 +108,7 @@ public class RouteAction extends Action {
             }
 
             try {
-                WFCMessage.IMHttpWrapper wrapper = WFCMessage.IMHttpWrapper.parseFrom(bytes);
+                WFCMessage.IMHttpWrapper wrapper = WFCMessage.IMHttpWrapper.parseFrom(bytes); //: wrapper.getRequest() topic, 据此取handler
                 String token = wrapper.getToken();
                 String userId = Tokenor.getUserId(token.getBytes());
                 LOG.info("RouteAction token={}, userId={}", token, userId);

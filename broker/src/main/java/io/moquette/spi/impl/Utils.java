@@ -38,11 +38,11 @@ public final class Utils {
         return ((MqttMessageIdVariableHeader) msg.variableHeader()).messageId();
     }
 
-    public static byte[] readBytesAndRewind(ByteBuf payload) {
+    public static byte[] readBytesAndRewind(ByteBuf payload) { // rewind：重播
         byte[] payloadContent = new byte[payload.readableBytes()];
-        int mark = payload.readerIndex();
+        int mark = payload.readerIndex(); // 备份当前读取位置
         payload.readBytes(payloadContent);
-        payload.readerIndex(mark);
+        payload.readerIndex(mark); // 本次读取会移动 readerIndex 为了下游还能重复读，将 payload 的读取索引重置为 mark，以便后续可以重新读取这些字节。
         return payloadContent;
     }
 

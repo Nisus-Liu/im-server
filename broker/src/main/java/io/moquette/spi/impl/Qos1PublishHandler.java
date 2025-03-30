@@ -150,7 +150,7 @@ public class Qos1PublishHandler extends QosPublishHandler {
 
 	void imHandler(String clientID, String fromUser, String topic, byte[] payloadContent, IMCallback callback, ProtoConstants.RequestSourceType requestSourceType) {
         LOG.info("imHandler fromUser={}, topic={}", fromUser, topic);
-        IMCallback wrapper = (errorcode, ackPayload) -> {
+        IMCallback wrapper = (errorcode, ackPayload) -> { // 响应内容, 继续传给 callback
             ackPayload.resetReaderIndex();
             byte code = ackPayload.readByte();
             if(ackPayload.readableBytes() > 0) {
@@ -205,7 +205,7 @@ public class Qos1PublishHandler extends QosPublishHandler {
             }
         };
 
-        IMHandler handler = m_imHandlers.get(topic);
+        IMHandler handler = m_imHandlers.get(topic); // topic 关联的 handler
         if (handler != null) {
             handler.doHandler(clientID, fromUser, topic, payloadContent, wrapper, requestSourceType);
         } else {

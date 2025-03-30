@@ -12,6 +12,6 @@ import java.io.IOException;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-        io.moquette.server.Server.start(args);
+        io.moquette.server.Server.start(args); //: 启动 Netty web 服务
     }
 }

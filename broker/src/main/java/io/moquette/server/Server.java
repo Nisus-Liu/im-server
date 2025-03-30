@@ -127,7 +127,7 @@ public class Server {
 
         final LoServer httpServer = new LoServer(httpLocalPort, httpAdminPort, instance.m_processor.getMessagesStore(), instance.m_store.sessionsStore());
         try {
-            httpServer.start();
+            httpServer.start(); //: 启动web服务
         } catch (InterruptedException e) {
             e.printStackTrace();
             Utility.printExecption(LOG, e);
@@ -280,7 +280,7 @@ public class Server {
 
     private IStore initStore(IConfig props, Server server) {
         LOG.info("Initializing messages and sessions stores...");
-        IStore store = instantiateConfiguredStore(props, server.getDbScheduler(), server);
+        IStore store = instantiateConfiguredStore(props, server.getDbScheduler(), server); //? 没有提供定制store的口子？
         if (store == null) {
             throw new IllegalArgumentException("Can't start the persistence layer");
         }
@@ -353,7 +353,7 @@ public class Server {
             }
         }
     }
-    
+
     private String getServerIp(IConfig config) {
         String serverIp = config.getProperty(BrokerConstants.SERVER_IP_PROPERTY_NAME);
         if (serverIp == null || serverIp.equals("0.0.0.0")) {

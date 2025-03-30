@@ -128,7 +128,7 @@ abstract public class Action {
 //                    throw e;
 //                }
 //            } else {
-            isSync = action(request, response);
+            isSync = action(request, response); // 调用子类的具体业务逻辑
 //            }
         } else {
             response.setStatus(HttpResponseStatus.OK);

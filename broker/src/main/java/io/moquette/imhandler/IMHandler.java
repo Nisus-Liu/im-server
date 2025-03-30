@@ -93,7 +93,7 @@ abstract public class IMHandler<T> {
             ParameterizedType p = (ParameterizedType) t ;
             Class<T> c = (Class<T>) p.getActualTypeArguments()[0];
             dataCls = c;
-            
+
             if (dataCls.getSuperclass().equals(GeneratedMessage.class)) {
                 parseDataMethod = dataCls.getMethod("parseFrom", byte[].class);
             } else if (dataCls.isPrimitive()) {
@@ -201,7 +201,7 @@ abstract public class IMHandler<T> {
 
                 try {
                     LOG.debug("execute handler for topic {}", topic);
-                    errorCode = action(ackPayload, clientID, fromUser, requestSourceType, getDataObject(payloadContent), callbackWrapper);
+                    errorCode = action(ackPayload, clientID, fromUser, requestSourceType, getDataObject(payloadContent), callbackWrapper); // getDataObject 得到IMHandler具体实现类泛型类型
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                     Utility.printExecption(LOG, e);

@@ -48,7 +48,7 @@ public class ServerAPIHelper {
                     requestId = aiRequestId.incrementAndGet();
                 }
             }
-            requestMap.put(requestId, new RequestInfo(fromUser, clientId, callback, message, requestId, request));
+            requestMap.put(requestId, new RequestInfo(fromUser, clientId, callback, message, requestId, request)); // 暂存请求信息，响应时用requestId取来用，并删掉
         }
 
         server.onApiMessage(fromUser, clientId, message, requestId, "", request, requestSourceType);

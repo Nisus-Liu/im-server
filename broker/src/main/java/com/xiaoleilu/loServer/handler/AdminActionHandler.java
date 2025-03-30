@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Action处理单元
- * 
+ *
  * @author Looly
  */
 public class AdminActionHandler extends ActionHandler {
@@ -36,6 +36,10 @@ public class AdminActionHandler extends ActionHandler {
 
     @Override
     boolean isValidePath(String path) {
+        // TODO 借用 admin
+        if (path.startsWith("/route")) {
+            return true;
+        }
         if (path.startsWith("/admin")) {
             return true;
         }

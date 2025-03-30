@@ -24,16 +24,16 @@ import org.slf4j.LoggerFactory;
  */
 public class ServerSetting {
     private static final org.slf4j.Logger Logger = LoggerFactory.getLogger(ServerSetting.class);
-	
+
 	//-------------------------------------------------------- Default value start
 	/** 默认的字符集编码 */
 	public final static String DEFAULT_CHARSET = "utf-8";
-	
+
 	public final static String MAPPING_ALL = "/*";
-	
+
 	public final static String MAPPING_ERROR = "/_error";
 	//-------------------------------------------------------- Default value end
-	
+
 	/** 字符编码 */
 	private static String charset = DEFAULT_CHARSET;
 	/** 端口 */
@@ -48,12 +48,12 @@ public class ServerSetting {
     private static Map<String, Class<? extends Action>> putActionMap = new ConcurrentHashMap<>();
     private static Map<String, Class<? extends Action>> deleteActionMap = new ConcurrentHashMap<>();
     private static Map<String, Class<? extends Action>> errorActionMap = new ConcurrentHashMap<>();
-	
+
 	static{
         errorActionMap.put(StrUtil.SLASH, DefaultIndexAction.class);
         errorActionMap.put(MAPPING_ERROR, UnknownErrorAction.class);
 	}
-	
+
 	/**
 	 * @return 获取编码
 	 */
@@ -66,7 +66,7 @@ public class ServerSetting {
 	public static Charset charset() {
 		return Charset.forName(getCharset());
 	}
-	
+
 	/**
 	 * 设置编码
 	 * @param charset 编码
@@ -74,7 +74,7 @@ public class ServerSetting {
 	public static void setCharset(String charset) {
 		ServerSetting.charset = charset;
 	}
-	
+
 	/**
 	 * @return 监听端口
 	 */
@@ -88,7 +88,7 @@ public class ServerSetting {
 	public static void setPort(int port) {
 		ServerSetting.port = port;
 	}
-	
+
 	//----------------------------------------------------------------------------------------------- Root start
 	/**
 	 * @return 根目录
@@ -132,7 +132,7 @@ public class ServerSetting {
 		ServerSetting.root = root;
 	}
 	//----------------------------------------------------------------------------------------------- Root end
-	
+
 	//----------------------------------------------------------------------------------------------- Filter start
 	/**
 	 * @return 获取FilterMap
@@ -158,7 +158,7 @@ public class ServerSetting {
 	public static void setFilterMap(Map<String, Filter> filterMap) {
 		ServerSetting.filterMap = filterMap;
 	}
-	
+
 	/**
 	 * 设置Filter类，已有的Filter类将被覆盖
 	 * @param path 拦截路径（必须以"/"开头）
@@ -168,7 +168,7 @@ public class ServerSetting {
 		if(StrUtil.isBlank(path)){
 			path = StrUtil.SLASH;
 		}
-		
+
 		if(null == filter) {
 			Logger.warn("Added blank action, pass it.");
 			return;
@@ -177,10 +177,10 @@ public class ServerSetting {
 		if(false == path.startsWith(StrUtil.SLASH)) {
 			path = StrUtil.SLASH + path;
 		}
-		
+
 		ServerSetting.filterMap.put(path, filter);
 	}
-	
+
 	/**
 	 * 设置Filter类，已有的Filter类将被覆盖
 	 * @param path 拦截路径（必须以"/"开头）
@@ -190,7 +190,7 @@ public class ServerSetting {
 		setFilter(path, (Filter) Singleton.get(filterClass));
 	}
 	//----------------------------------------------------------------------------------------------- Filter end
-	
+
 	//----------------------------------------------------------------------------------------------- Action start
 	/**
 	 * @return 获取ActionMap
@@ -234,7 +234,7 @@ public class ServerSetting {
         Class<? extends Action> cls = getActionMap(method).get(path.trim());
         if(cls != null) {
             try {
-                return cls.newInstance();
+                return cls.newInstance(); //: 每次都实例化？效率？
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -243,7 +243,7 @@ public class ServerSetting {
         }
         return null;
 	}
-	
+
 	/**
 	 * 增加Action类，已有的Action类将被覆盖<br>
 	 * 所有Action都是以单例模式存在的！
@@ -268,7 +268,7 @@ public class ServerSetting {
         if (methodAnnotation != null) {
             method = methodAnnotation.value();
         }
-        ServerSetting.getActionMap(method).put(path, actionClass);
+        ServerSetting.getActionMap(method).put(path, actionClass); // 扫描注解，拿到actionClass，注册进去
 	}
 
 	/**
@@ -288,5 +288,5 @@ public class ServerSetting {
         throw new ServerSettingException("Can not find Route annotation,please add annotation to Action class!");
 	}
 	//----------------------------------------------------------------------------------------------- Action start
-	
+
 }

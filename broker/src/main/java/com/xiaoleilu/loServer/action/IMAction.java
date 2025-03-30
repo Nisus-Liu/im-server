@@ -49,7 +49,7 @@ public class IMAction extends Action {
                 return true;
             }
 
-            String cid = fullHttpRequest.headers().get("cid");
+            String cid = fullHttpRequest.headers().get("cid"); // clientId（base64格式）
             byte[] cbytes = Base64.getDecoder().decode(cid);
             cbytes = AES.AESDecrypt(cbytes, "", true);
             if (cbytes == null) {
@@ -58,7 +58,7 @@ public class IMAction extends Action {
             }
             cid = new String(cbytes);
 
-            MemorySessionStore.Session session = sessionsStore.getSession(cid);
+            MemorySessionStore.Session session = sessionsStore.getSession(cid); // clientId -> session
 
             if (session != null) {
                 bytes = AES.AESDecrypt(bytes, session.getSecret(), true);
@@ -74,7 +74,7 @@ public class IMAction extends Action {
             }
 
             try {
-                WFCMessage.IMHttpWrapper wrapper = WFCMessage.IMHttpWrapper.parseFrom(bytes);
+                WFCMessage.IMHttpWrapper wrapper = WFCMessage.IMHttpWrapper.parseFrom(bytes); // google protobuf 协议反序列化成 Javabean
                 String token = wrapper.getToken();
                 String userId = Tokenor.getUserId(token.getBytes());
                 if (userId == null) {
